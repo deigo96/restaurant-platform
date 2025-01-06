@@ -8,6 +8,7 @@ from psycopg2.extras import RealDictCursor
 from .db.database import engine, get_db
 from .src.products import router as product_routers, models as product_models
 from .src.users import router as user_routers, models as user_models
+from .src.auth import router as auth_routers
 
 product_models.Base.metadata.create_all(bind=engine)
 user_models.Base.metadata.create_all(bind=engine)
@@ -15,6 +16,7 @@ user_models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 app.include_router(user_routers.UserRouter().router)
 app.include_router(product_routers.ProductRouter().router)
+app.include_router(auth_routers.AuthRouter().router)
 
 # try:
 #     conn = psycopg2.connect(

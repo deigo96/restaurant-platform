@@ -7,12 +7,16 @@ from ..utils import response as response_util
 
 class ProductRouter:
     def __init__(self):
-        self.router = APIRouter(prefix="/products")
+        self.router = APIRouter(
+            prefix="/products",
+            tags=["Products"]
+            )
 
         @self.router.get("/", response_model=List[response.ResponseProduct])
         async def get_products(
             service : service.ProductService = Depends(self.get_service)
         ):
+            
             return service.get_products()
         
         @self.router.post("/", status_code=status.HTTP_201_CREATED, response_model=response.ResponseProduct)

@@ -1,14 +1,17 @@
 from . import response, service, schemas
-from fastapi import FastAPI, Depends, APIRouter, status
+from fastapi import Depends, APIRouter, status
 from sqlalchemy.orm import Session
 from app.db.database import get_db
 from typing import List
 from ..utils import response as response_util
+from ..utils import auth as authentication
 
 class UserRouter:
     def __init__(self):
-        self.router = APIRouter(prefix="/users")
-
+        self.router = APIRouter(
+            prefix="/users",
+            tags=["users"],)
+        self.jwt_middleware = authentication.JWTToken()
 
         @self.router.get("/")
         async def get_users(
@@ -16,28 +19,12 @@ class UserRouter:
         ):
             return "hello world"
         
-        @self.router.get("/login", response_model=response.UserResponse)
-        async def login_user(
-            payload: schemas.LoginUser,
-            service : service.UserService = Depends(self.get_service)
-        ):
-            user = None
-            response = response_util.Custom_Response()
-            try:
-                user = service.login_user(payload)
-            except Exception as e:
-                response = response_util.Custom_Response(message=str(e))
-            user = response.wrap_error(user)
-
-            return user
-        
-
         @self.router.get("/{user_id}", response_model=response.UserResponse)
         def get_user(
             user_id: int,
-            service : service.UserService = Depends(self.get_service)
+            service : service.UserService = Depends(self.get_service),
+            get_current_user: int = Depends(self.jwt_middleware.get_current_user)
         ):
-            user = None
             response = response_util.Custom_Response()
             try:
                 user = service.get_user(user_id)
