@@ -14,6 +14,7 @@ user_models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 app.include_router(user_routers.UserRouter().router)
+app.include_router(product_routers.ProductRouter().router)
 
 # try:
 #     conn = psycopg2.connect(
@@ -32,7 +33,7 @@ app.include_router(user_routers.UserRouter().router)
 # db.connect()
 
 # user_routers.UserRouter(app=app)
-product_routers.ProductRouter(app=app)
+# product_routers.ProductRouter(app=app)
 
 # product_routes.ProductRoutes(app=app, db=get_db)
 

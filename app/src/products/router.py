@@ -1,28 +1,28 @@
 from . import response, service, schemas
-from fastapi import Depends, Response, status
+from fastapi import Depends, Response, status, APIRouter
 from sqlalchemy.orm import Session
 from app.db.database import get_db
 from typing import List
 from ..utils import response as response_util
 
 class ProductRouter:
-    def __init__(self, app):
-        self.app = app
+    def __init__(self):
+        self.router = APIRouter(prefix="/products")
 
-        @self.app.get("/products", response_model=List[response.ResponseProduct])
+        @self.router.get("/", response_model=List[response.ResponseProduct])
         async def get_products(
             service : service.ProductService = Depends(self.get_service)
         ):
             return service.get_products()
         
-        @self.app.post("/products", status_code=status.HTTP_201_CREATED, response_model=response.ResponseProduct)
+        @self.router.post("/", status_code=status.HTTP_201_CREATED, response_model=response.ResponseProduct)
         async def create_products(
             payload: schemas.PostValidation,
             service : service.ProductService = Depends(self.get_service)
         ):
             return service.create_product(payload)
         
-        @self.app.get("/products/{product_id}", response_model=response.ResponseProduct)
+        @self.router.get("/{product_id}", response_model=response.ResponseProduct)
         async def get_product(
             product_id: int,
             service : service.ProductService = Depends(self.get_service)
@@ -35,7 +35,7 @@ class ProductRouter:
 
             return product
         
-        @self.app.put("/products/{product_id}", response_model=response.ResponseProduct)
+        @self.router.put("/{product_id}", response_model=response.ResponseProduct)
         async def update_product(
             product_id: int,
             payload: schemas.UpdateValidation,
@@ -49,7 +49,7 @@ class ProductRouter:
 
             return updated_product
 
-        @self.app.delete("/products/{product_id}")
+        @self.router.delete("/{product_id}")
         async def delete_product(
             product_id: int,
             service : service.ProductService = Depends(self.get_service)

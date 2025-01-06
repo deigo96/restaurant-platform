@@ -7,8 +7,6 @@ from ..utils import response as response_util
 
 class UserRouter:
     def __init__(self):
-        app = None
-        self.app = FastAPI()
         self.router = APIRouter(prefix="/users")
 
 
@@ -18,7 +16,7 @@ class UserRouter:
         ):
             return "hello world"
         
-        @self.app.get("/users/login", response_model=response.UserResponse)
+        @self.router.get("/login", response_model=response.UserResponse)
         async def login_user(
             payload: schemas.LoginUser,
             service : service.UserService = Depends(self.get_service)
@@ -34,7 +32,7 @@ class UserRouter:
             return user
         
 
-        @self.app.get("/user/{user_id}", response_model=response.UserResponse)
+        @self.router.get("/{user_id}", response_model=response.UserResponse)
         def get_user(
             user_id: int,
             service : service.UserService = Depends(self.get_service)
@@ -49,7 +47,7 @@ class UserRouter:
 
             return user
 
-        @self.app.post("/users", status_code=status.HTTP_201_CREATED, response_model=response.CreateUserResponse)
+        @self.router.post("/", status_code=status.HTTP_201_CREATED, response_model=response.CreateUserResponse)
         async def create_users(
             payload: schemas.CreateUser,
             service : service.UserService = Depends(self.get_service)
