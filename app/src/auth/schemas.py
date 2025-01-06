@@ -6,9 +6,5 @@ class UserLogin(BaseModel):
     email: Optional[EmailStr] = None
     password: str
 
-class Token(BaseModel):
-    access_token: str
-    token_type: str
-
 class TokenData(BaseModel):
     id: Optional[str] = None
