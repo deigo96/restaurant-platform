@@ -9,14 +9,19 @@ from .db.database import engine, get_db
 from .src.products import router as product_routers, models as product_models
 from .src.users import router as user_routers, models as user_models
 from .src.auth import router as auth_routers
+from .src.order_details import model as order_details_models
+from .src.orders import model as order_models, router as order_routers
 
 product_models.Base.metadata.create_all(bind=engine)
 user_models.Base.metadata.create_all(bind=engine)
+order_details_models.Base.metadata.create_all(bind=engine)
+order_models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 app.include_router(user_routers.UserRouter().router)
 app.include_router(product_routers.ProductRouter().router)
 app.include_router(auth_routers.AuthRouter().router)
+app.include_router(order_routers.OrderRouter().router)
 
 # try:
 #     conn = psycopg2.connect(

@@ -7,6 +7,7 @@ load_dotenv()
 class Config:
     SECRET_KEY = getenv("SECRET_KEY")
     ALGORITHM = getenv("ALGORITHM")
+    print(f"minutes {getenv("ACCESS_TOKEN_EXPIRE_MINUTES")}")
     ACCESS_TOKEN_EXPIRE_MINUTES = int(getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
 
     
