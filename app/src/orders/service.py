@@ -17,7 +17,6 @@ class OrderService:
         print(f"order response {order_response}")
 
         order_detail_response = self.order_details_service.get_order_details(order_id)
-        print(f"order detail response {order_detail_response}")
 
         detail = response.GetOrderResponse(
             id=order_response.id,

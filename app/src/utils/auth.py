@@ -30,9 +30,6 @@ class JWTToken:
 
     def create_token(self, payload: dict, expires_delta: int = None):
         to_encode = payload.copy()
-        print(f"datenow {datetime.now(timezone.utc)}")
-        print(f"config expire {self.config.ACCESS_TOKEN_EXPIRE_MINUTES}")
-        print(f"expire {timedelta(minutes=self.config.ACCESS_TOKEN_EXPIRE_MINUTES)}")
         expire = datetime.now(timezone.utc) + timedelta(minutes=self.config.ACCESS_TOKEN_EXPIRE_MINUTES)
         to_encode.update({"exp": expire})
         access_token = jwt.encode(to_encode, self.config.SECRET_KEY, algorithm=self.config.ALGORITHM)
